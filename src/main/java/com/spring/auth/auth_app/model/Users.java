@@ -46,4 +46,10 @@ public class Users {
     private Set<Role> role = new HashSet<>();
     @Enumerated(EnumType.STRING)
     private Provider provider= Provider.LOCAL;
+    @PrePersist
+    void onCreate() {
+        Instant now = Instant.now();
+       if(createdAt==null) createdAt=now;
+       if (updatedAt==null) updatedAt= now;
+    }
 }
