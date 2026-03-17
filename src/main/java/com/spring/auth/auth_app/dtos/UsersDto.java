@@ -22,7 +22,7 @@ public class UsersDto {
     private String name;
     private String password;
     private String email;
-    private boolean status=true;
+    private Boolean status=true;
     private byte[] Image_Data;
     private String Image_Name;
     private String Image_Type;

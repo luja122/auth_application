@@ -11,5 +11,5 @@ public interface UserService {
    public List<UsersDto> getAllUsers();
    public UsersDto getUserById(String id);
    public UsersDto updateUsers(UserUpdateDto userUpdateDto, MultipartFile image, String id);
-   public void deleteUser(String id);
+   public String deleteUser(String id);
 }

@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
         ExceptionResponse internalServerError = new ExceptionResponse(exception.getMessage(), HttpStatus.BAD_REQUEST,400);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(internalServerError);
     }
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> handlerUserAlreadyExistException(UserAlreadyExistException exception){
+       ExceptionResponse internalServerError= new ExceptionResponse(exception.getMessage(),HttpStatus.NOT_FOUND,404);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(internalServerError);
+    }
 }

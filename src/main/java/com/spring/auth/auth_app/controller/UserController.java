@@ -19,13 +19,15 @@ public class UserController {
     private UserService userService;
     @GetMapping("/user")
     public ResponseEntity<List<UsersDto>> getAllUsers(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(userService.getAllUsers());
+        System.out.println(userService.getAllUsers());
+        return ResponseEntity.ok(userService.getAllUsers());
     }
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable String id){
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
+      return ResponseEntity.ok(userService.deleteUser(id)) ;
+
     }
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{email}")
     public ResponseEntity<Object> updateUsers(UserUpdateDto userUpdateDto, MultipartFile image, String id){
         return ResponseEntity.ok().body(userService.updateUsers(userUpdateDto,image,id));
     }

@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UsersDto> getAllUsers() {
         List<Users>  users =  userRepo.findAll();
-        return null;
+        return users.stream().map(user->modelMapper.map(user,UsersDto.class)).toList();
     }
 
     @Override
@@ -65,10 +67,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUser(String id) {
+    public String deleteUser(String id) {
         UUID conv_id = UserHelper.praseUuid(id);
        Users user = userRepo.findById(conv_id).orElseThrow(()->new ResourceNotFoundException("There is not user of that id to delete"));
         userRepo.deleteById(conv_id);
-
+   return "Sucessfully deleted";
     }
 }
