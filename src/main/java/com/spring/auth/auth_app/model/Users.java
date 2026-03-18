@@ -34,7 +34,7 @@ public class Users {
     @NotBlank
     @Email
     private String email;
-    private boolean status=true;
+    private boolean isEnabled=true;
     @Lob
     private byte[] Image_Data;
     private String Image_Name;
