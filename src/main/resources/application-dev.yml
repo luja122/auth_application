@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/auth_app
-    username: root
-    password: 1234
+    username: ${DB_username}
+    password: ${DB_-password}
     hikari:
       pool-name: LibraryHikariPool
       maximum-pool-size: 20
@@ -21,5 +21,18 @@ spring:
     properties:
        hibernate:
 
+Logging:
+  level:
+    org.springframwork.security: DEBUG
+security:
+  jwt:
+    secret: ${MY_SECRET_KEY}
+    issuer: ${ISSUER}
+    access_ttl: ${ACCESS_TTL:900000}       #  15 min
+    refresh_ttl: ${REFRESH_TTL:604800000}  # 7 days
+    refresh_token_cookie_name: ${REFRESH_COOKIE:refresh_token}
+    cookie_secure: ${COOKIE_SECURE:true}
+    cookie_http_only: ${COOKIE_HTTP_ONLY:true}
+    cookie_same_site: ${COOKIE_SAME_SITE:Strict}
 
 

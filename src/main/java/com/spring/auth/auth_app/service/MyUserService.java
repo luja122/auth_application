@@ -1,7 +1,7 @@
 package com.spring.auth.auth_app.service;
 
 import com.spring.auth.auth_app.Exception.ResourceNotFoundException;
-import com.spring.auth.auth_app.model.UserPrinciple;
+import com.spring.auth.auth_app.security.UserPrinciple;
 import com.spring.auth.auth_app.model.Users;
 import com.spring.auth.auth_app.repo.UserRepo;
 import lombok.AllArgsConstructor;
