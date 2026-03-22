@@ -5,18 +5,20 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor
+@Service
 public class JwtService {
-
     @Value("${security.jwt.secret}")
     private final String secretkey;
     @Value("${security.jwt.issuer}")
@@ -83,6 +85,15 @@ public class JwtService {
     }
     public String getJti(String token){
         return parse(token).getBody().getId();
+    }
+    public String getEmail(String token){
+        Claims c = parse(token).getBody();
+        return(String) c.get("email");
+    }
+    public List<String> getRole(String token){
+        Claims c = parse(token).getBody();
+        return(List<String>)c.get("role");
+
     }
 }
 
