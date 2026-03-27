@@ -35,6 +35,7 @@ public class SecurityConfig {
                request.requestMatchers("/auth/**").permitAll()
                        .requestMatchers("/admin/**").hasRole("ADMIN")
                        .anyRequest().authenticated()
+
        );
        http.exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
@@ -61,5 +62,9 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config){
         return config.getAuthenticationManager();
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 }

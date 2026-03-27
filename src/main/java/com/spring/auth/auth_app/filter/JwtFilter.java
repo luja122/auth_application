@@ -36,6 +36,11 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserRepo repo;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().startsWith("/auth/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
@@ -63,7 +68,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String userId = jws.getBody().getSubject();
             UUID uuid = UserHelper.praseUuid(userId);
-
             // Fetch user
             Users user = repo.findById(uuid)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -98,4 +102,6 @@ public class JwtFilter extends OncePerRequestFilter {
         //  Continue request
         filterChain.doFilter(request, response);
     }
+
+
 }

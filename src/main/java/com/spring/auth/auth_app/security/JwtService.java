@@ -3,7 +3,9 @@ package com.spring.auth.auth_app.security;
 import com.spring.auth.auth_app.model.Users;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +18,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@AllArgsConstructor
+
 @Service
+@Data
 public class JwtService {
     @Value("${security.jwt.secret}")
-    private final String secretkey;
+    private  String secretkey;
     @Value("${security.jwt.issuer}")
-    private final String issuer;
+    private  String issuer;
     @Value("${security.jwt.access_ttl}")
-    private final long access;
+    private  long access;
     @Value("${security.jwt.refresh_ttl}")
-    private final long refresh;
-    private final SecretKey key = Keys.hmacShaKeyFor(secretkey.getBytes(StandardCharsets.UTF_8));
+    private  long refresh;
+    private  SecretKey key;
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretkey.getBytes(StandardCharsets.UTF_8));
+    }
+
 
     public String generateAccessToken(Users user) {
 

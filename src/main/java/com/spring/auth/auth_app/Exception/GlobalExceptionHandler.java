@@ -3,6 +3,7 @@ package com.spring.auth.auth_app.Exception;
 import com.spring.auth.auth_app.dtos.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,5 +23,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handlerUserAlreadyExistException(UserAlreadyExistException exception){
        ExceptionResponse internalServerError= new ExceptionResponse(exception.getMessage(),HttpStatus.NOT_FOUND,404);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(internalServerError);
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handlerUserNotFoundException(UsernameNotFoundException exception){
+        ExceptionResponse internalServerError= new ExceptionResponse(exception.getMessage(),HttpStatus.NOT_FOUND,404);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(internalServerError);
+    }
+    @ExceptionHandler(UserIsNotEnable.class)
+    public ResponseEntity<ExceptionResponse> handleUserIsNotEnable(UserIsNotEnable e){
+        ExceptionResponse response = new ExceptionResponse(e.getMessage(),HttpStatus.UNPROCESSABLE_CONTENT,422);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(response);
     }
 }

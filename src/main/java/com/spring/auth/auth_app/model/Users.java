@@ -14,7 +14,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,35 +21,46 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class Users {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id", updatable = false, nullable = false)
     private UUID id;
-    @Column(name ="user_name",unique = true)
+
+    @Column(name = "user_name", unique = true)
     @NotBlank
     private String name;
+
     @NotBlank
     private String password;
+
     @NotBlank
     @Email
     private String email;
-    private boolean isEnabled=true;
+
+    private boolean isEnabled = true;
+
     @Lob
-    private byte[] Image_Data;
-    private String Image_Name;
-    private String Image_Type;
-    private Instant createdAt =Instant.now();
-    private Instant updatedAt =Instant.now();
+    private byte[] imageData;
+    private String imageName;
+    private String imageType;
+
+    private Instant createdAt;
+    private Instant updatedAt;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "roles",
-            joinColumns =@JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> role = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
-    private Provider provider= Provider.LOCAL;
+    private Provider provider = Provider.LOCAL;
+
     @PrePersist
     void onCreate() {
         Instant now = Instant.now();
-       if(createdAt==null) createdAt=now;
-       if (updatedAt==null) updatedAt= now;
+        if (createdAt == null) createdAt = now;
+        if (updatedAt == null) updatedAt = now;
     }
 }
