@@ -33,6 +33,6 @@ security:
     refresh_token_cookie_name: ${REFRESH_COOKIE:refresh_token}
     cookie_secure: ${COOKIE_SECURE:true}
     cookie_http_only: ${COOKIE_HTTP_ONLY:true}
-    cookie_same_site: ${COOKIE_SAME_SITE:Strict}
+    cookie_same_site: ${COOKIE_SAME_SITE:lax}
 
 

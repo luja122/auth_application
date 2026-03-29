@@ -10,6 +10,8 @@ import com.spring.auth.auth_app.model.Users;
 import com.spring.auth.auth_app.repo.RefreshTokenRepo;
 import com.spring.auth.auth_app.repo.UserRepo;
 import com.spring.auth.auth_app.security.JwtService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,8 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final RefreshTokenRepo refreshTokenRepo;
+    @Autowired
+    private final CookieService cookieService;
     @Override
     public String register(UsersDto data) {
         if(userRepo.existsByEmail(data.getEmail())){
@@ -54,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login (LoginRequest request) {
+    public LoginResponse login (HttpServletResponse response, LoginRequest request) {
         Authentication auth = new UsernamePasswordAuthenticationToken(request.email(),request.password());
         authenticationManager.authenticate(auth); //->If user cannot authenticate the user this throws and error
           Users user =userRepo.findByEmail(request.email()).orElseThrow(()->new UsernameNotFoundException("User not found"));
@@ -62,12 +66,14 @@ public class AuthServiceImpl implements AuthService {
               throw new UserIsNotEnable("User is not available");
           }
           //generate an Refresh token
-           String jti = UUID.randomUUID().toString();
-          var refresh_tokenobj= RefreshToken.builder().jti(jti).createdAt(Instant.now()).expiresAt(Instant.now().plusMillis(jwtService.getRefresh())).user(user).revoked(false).build();
-           refreshTokenRepo.save(refresh_tokenobj);
+
+          var refresh_tokenobj= RefreshToken.builder().jti(UUID.randomUUID().toString()).createdAt(Instant.now()).expiresAt(Instant.now().plusMillis(jwtService.getRefresh())).user(user).revoked(false).build();
+
+          refreshTokenRepo.save(refresh_tokenobj);
            String refresh_Token =jwtService.generateRefreshToken(user,refresh_tokenobj.getJti());
           //generate an acess token
           String acessToken = jwtService.generateAccessToken(user);
-        return new LoginResponse(acessToken,"",jwtService.getAccess(),"",modelMapper.map(user,UsersDto.class)) ;
+          cookieService.attachRefreshTokenCookie(response,acessToken,(int)jwtService.getRefresh());
+        return new LoginResponse(acessToken,refresh_Token,jwtService.getAccess(),"",modelMapper.map(user,UsersDto.class)) ;
     }
 }
