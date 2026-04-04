@@ -7,5 +7,4 @@ public record LoginResponse(
         String typ,
         UsersDto user
 ) {
-
 }

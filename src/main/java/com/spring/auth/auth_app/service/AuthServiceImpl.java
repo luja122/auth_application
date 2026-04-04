@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
           var refresh_tokenobj= RefreshToken.builder().jti(UUID.randomUUID().toString()).createdAt(Instant.now()).expiresAt(Instant.now().plusMillis(jwtService.getRefresh())).user(user).revoked(false).build();
 
           refreshTokenRepo.save(refresh_tokenobj);
-           String refresh_Token =jwtService.generateRefreshToken(user,refresh_tokenobj.getJti());
+          String refresh_Token =jwtService.generateRefreshToken(user,refresh_tokenobj.getJti());
           //generate an acess token
           String acessToken = jwtService.generateAccessToken(user);
           cookieService.attachRefreshTokenCookie(response,acessToken,(int)jwtService.getRefresh());
